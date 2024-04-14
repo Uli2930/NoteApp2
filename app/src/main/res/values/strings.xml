@@ -4,4 +4,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="go_work">Начать работу</string>
     <string name="skip">Пропустить</string>
+    <string name="plus">+</string>
+    <string name="search_notes">Поиск заметок</string>
+    <string name="notes">Заметки</string>
+    <string name="add">Добавить</string>
 </resources>
