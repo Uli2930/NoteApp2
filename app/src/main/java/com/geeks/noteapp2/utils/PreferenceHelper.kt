@@ -11,7 +11,11 @@ class PreferenceHelper {
         sharedPreferences = context.getSharedPreferences("shared" , Context.MODE_PRIVATE)
     }
 
-    var isOnBoardShow: Boolean
+    var title: String?
+        get() = sharedPreferences.getString("title", "")
+        set(value) = sharedPreferences.edit().putString("title", value).apply()
+
+    var isOnBoard: Boolean
         get() {
             return if (::sharedPreferences.isInitialized) {
                 sharedPreferences.getBoolean("board", false)

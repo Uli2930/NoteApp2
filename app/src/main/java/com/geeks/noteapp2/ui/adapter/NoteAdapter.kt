@@ -11,7 +11,10 @@ import com.geeks.noteapp2.databinding.ItemNoteBinding
 class NoteAdapter : ListAdapter<NoteModel, NoteAdapter.ViewHolder>(DiffCallback()) {
     class ViewHolder(private val binding: ItemNoteBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: NoteModel?) {
-            binding.itemTxt.text = item?.title
+            binding.itemTitle.text = item?.title
+            binding.itemDescription.text = item?.description
+            binding.itemDate.text = item?.date
+            binding.itemTime.text = item?.time
         }
 
     }

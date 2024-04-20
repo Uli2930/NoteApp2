@@ -62,7 +62,8 @@
             android:textSize="16sp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/note_rv"
+            android:id="@+id/rv_note"
+            android:padding="24dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

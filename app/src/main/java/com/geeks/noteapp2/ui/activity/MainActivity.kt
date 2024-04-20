@@ -26,9 +26,9 @@ class MainActivity : AppCompatActivity() {
         preferenceHelper = PreferenceHelper()
         preferenceHelper.unit(applicationContext)
 
-        if (!preferenceHelper.isOnBoardShow) {
+        if (!preferenceHelper.isOnBoard) {
             navController.navigate(R.id.onBoardFragment)
-            preferenceHelper.isOnBoardShow = true
+            preferenceHelper.isOnBoard = true
         } else {
             navController.navigate(R.id.noteFragment)
 

@@ -7,19 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.geeks.noteapp2.App
 import com.geeks.noteapp2.R
-import com.geeks.noteapp2.data.model.NoteModel
 import com.geeks.noteapp2.databinding.FragmentNoteBinding
-import com.geeks.noteapp2.extensions.getBackStackData
 import com.geeks.noteapp2.ui.adapter.NoteAdapter
-import com.geeks.noteapp2.utils.PreferenceHelper
+
 
 
 class NoteFragment : Fragment() {
 
     private lateinit var binding: FragmentNoteBinding
     private val noteAdapter = NoteAdapter()
-    private val list: ArrayList<NoteModel> = ArrayList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,15 +35,15 @@ class NoteFragment : Fragment() {
     }
 
     private fun initialize() {
-        binding.noteRv.apply {
+        binding.rvNote.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = noteAdapter
         }
     }
 
     private fun setupListeners() = with(binding) {
-        val preferences = PreferenceHelper()
-        preferences.unit(requireContext())
+        /*val preferences = PreferenceHelper()
+        preferences.unit(requireContext())*/
         btnPlus.setOnClickListener {
             findNavController().navigate(R.id.action_noteFragment_to_noteDetailFragment)
         }
@@ -53,11 +51,14 @@ class NoteFragment : Fragment() {
     }
 
     private fun getData() {
-        getBackStackData<String>("key") { data ->
+        App().getInstance()?.noteDao()?.getAll()?.observe(viewLifecycleOwner){
+            noteAdapter.submitList(it)
+        }
+       /* getBackStackData<String>("key") { data ->
             val noteModel = NoteModel(data)
             list.add(noteModel)
             noteAdapter.submitList(list)
-        }
+        }*/
     }
 
 }

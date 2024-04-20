@@ -8,4 +8,6 @@
     <string name="search_notes">Поиск заметок</string>
     <string name="notes">Заметки</string>
     <string name="add">Добавить</string>
+    <string name="ready">Готово</string>
+    <string name="title">title</string>
 </resources>
