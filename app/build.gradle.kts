@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("com.google.devtools.ksp")
+
 
 
 }
@@ -58,6 +60,12 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
     //Lottie Animation
     implementation ("com.airbnb.android:lottie:6.4.0")
+    // Room
+
+    //ROOM
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-ktx:$roomVersion")
+    ksp("androidx.room:room-compiler:$roomVersion")
 
 
 

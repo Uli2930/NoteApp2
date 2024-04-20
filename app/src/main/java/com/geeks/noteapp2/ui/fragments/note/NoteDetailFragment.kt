@@ -1,0 +1,133 @@
+package com.geeks.noteapp2.ui.fragments.note
+
+import android.graphics.Color
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.geeks.noteapp2.App
+import com.geeks.noteapp2.R
+import com.geeks.noteapp2.data.model.NoteModel
+import com.geeks.noteapp2.databinding.FragmentNoteDetailBinding
+import com.geeks.noteapp2.extensions.setBackStackData
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+
+
+class NoteDetailFragment : Fragment() {
+
+    private lateinit var binding: FragmentNoteDetailBinding
+
+    var color: Int = Color.BLACK
+    var timeText = ""
+    var dateText = ""
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentNoteDetailBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setupTextChangedListener()
+        checkButtonVisibility()
+        initListener()
+        chooseColor()
+        val currentDate = Calendar.getInstance().time
+        val dateFormat: DateFormat = SimpleDateFormat("dd MMMM", Locale.getDefault())
+        dateText = dateFormat.format(currentDate)
+        val timeFormat: DateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+        timeText = timeFormat.format(currentDate)
+        binding.tvTime.text = timeText
+        binding.tvDate.text = dateText
+    }
+
+
+    private fun setupTextChangedListener() {
+        binding.etTitle.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                checkButtonVisibility()
+            }
+        })
+
+        binding.btnAdd.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                checkButtonVisibility()
+            }
+        })
+    }
+
+    private fun checkButtonVisibility() {
+        val titleText = binding.etTitle.text.toString().trim()
+        val text = binding.btnAdd.text.toString().trim()
+
+        binding.btnAdd.visibility = if (titleText.isNotEmpty() && text.isNotEmpty()) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+    }
+
+    private fun initListener() {
+        binding.btnAdd.setOnClickListener {
+            val noteModel = NoteModel(
+                title = binding.etTitle.text.toString(),
+                description = binding.etDescription.text.toString(),
+                color = color,
+                time = timeText,
+                date = dateText
+            )
+            App().getInstance()?.noteDao()?.insertNote(noteModel)
+            findNavController().navigate(
+                R.id.noteFragment)
+        }
+    }
+    private fun chooseColor() = with(binding){
+        btnBlack.setOnClickListener {
+            if (!btnBlack.isChecked){
+                btnBlack.isChecked = true
+            }
+            btnGray2.isChecked = !btnBlack.isChecked
+            btnRed.isChecked = !btnBlack.isChecked
+
+            color = Color.BLACK
+        }
+        btnGray2.setOnClickListener {
+            if (!btnGray2.isChecked){
+                btnGray2.isChecked = true
+            }
+            btnBlack.isChecked = !btnGray2.isChecked
+            btnRed.isChecked = !btnGray2.isChecked
+
+            color = Color.GRAY
+        }
+        btnRed.setOnClickListener {
+            if (!btnRed.isChecked){
+                btnRed.isChecked = true
+            }
+            btnGray2.isChecked = !btnRed.isChecked
+            btnBlack.isChecked = !btnRed.isChecked
+
+            color = Color.RED
+        }
+    }
+}
+
