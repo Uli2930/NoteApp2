@@ -1,7 +1,6 @@
 package com.geeks.noteapp2.data.model
 
 import android.graphics.Color
-import android.icu.text.CaseMap.Title
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 

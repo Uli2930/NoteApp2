@@ -10,10 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.geeks.noteapp2.App
-import com.geeks.noteapp2.R
 import com.geeks.noteapp2.data.model.NoteModel
 import com.geeks.noteapp2.databinding.FragmentNoteDetailBinding
-import com.geeks.noteapp2.extensions.setBackStackData
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -23,10 +21,11 @@ import java.util.Locale
 class NoteDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentNoteDetailBinding
+    private var noteId: Int = -1
 
     var color: Int = Color.BLACK
-    var timeText = ""
-    var dateText = ""
+    var time = ""
+    var date = ""
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,17 +38,32 @@ class NoteDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        upDate()
+        setUpListener()
         setupTextChangedListener()
         checkButtonVisibility()
-        initListener()
         chooseColor()
+
         val currentDate = Calendar.getInstance().time
         val dateFormat: DateFormat = SimpleDateFormat("dd MMMM", Locale.getDefault())
-        dateText = dateFormat.format(currentDate)
+        date = dateFormat.format(currentDate)
         val timeFormat: DateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-        timeText = timeFormat.format(currentDate)
-        binding.tvTime.text = timeText
-        binding.tvDate.text = dateText
+        time = timeFormat.format(currentDate)
+        binding.tvTime.text = time
+        binding.tvDate.text = date
+    }
+
+    private fun upDate() {
+        arguments?.let { args->
+            noteId = args.getInt("noteId", -1)
+        }
+        if (noteId != -1){
+            val argsNote = App().getInstance()?.noteDao()?.getNoteById(noteId)
+            argsNote?.let { model->
+                binding.etTitle.setText(model.title)
+                binding.etDescription.setText(model.description)
+            }
+        }
     }
 
 
@@ -76,28 +90,30 @@ class NoteDetailFragment : Fragment() {
     }
 
     private fun checkButtonVisibility() {
-        val titleText = binding.etTitle.text.toString().trim()
-        val text = binding.btnAdd.text.toString().trim()
+        val etTitle = binding.etTitle.text.toString().trim()
+        val etDescription = binding.btnAdd.text.toString().trim()
 
-        binding.btnAdd.visibility = if (titleText.isNotEmpty() && text.isNotEmpty()) {
+        binding.btnAdd.visibility = if (etTitle.isNotEmpty() && etDescription.isNotEmpty()) {
             View.VISIBLE
         } else {
             View.GONE
         }
     }
 
-    private fun initListener() {
+    private fun setUpListener() {
         binding.btnAdd.setOnClickListener {
-            val noteModel = NoteModel(
-                title = binding.etTitle.text.toString(),
-                description = binding.etDescription.text.toString(),
-                color = color,
-                time = timeText,
-                date = dateText
-            )
-            App().getInstance()?.noteDao()?.insertNote(noteModel)
-            findNavController().navigate(
-                R.id.noteFragment)
+            val etTitle = binding.etTitle.text.toString()
+            val etDescription = binding.etDescription.text.toString()
+            val date = binding.tvDate.text.toString()
+            val time = binding.tvTime.text.toString()
+            if (noteId != -1){
+                val updateNote = NoteModel(etTitle, etDescription, date, time)
+                updateNote.id = noteId
+                App().getInstance()?.noteDao()?.updateNote(updateNote)
+            }else {
+                App().getInstance()?.noteDao()?.insertNote(NoteModel(etTitle, etDescription))
+            }
+            findNavController().navigateUp()
         }
     }
     private fun chooseColor() = with(binding){
