@@ -44,7 +44,9 @@ class OnBoardFragment : Fragment() {
                 setCurrentItem(currentItem + 2, true)
             }
 
+
         }
+
     }
 
     private fun nextButton() = with(binding) {

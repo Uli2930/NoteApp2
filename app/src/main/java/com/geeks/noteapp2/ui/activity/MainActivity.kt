@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
             preferenceHelper.isOnBoard = true
         } else {
             navController.navigate(R.id.noteFragment)
-
         }
     }
 }

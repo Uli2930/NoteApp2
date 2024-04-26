@@ -8,22 +8,13 @@ class PreferenceHelper {
     private lateinit var sharedPreferences: SharedPreferences
 
     fun unit(context: Context) {
-        sharedPreferences = context.getSharedPreferences("shared" , Context.MODE_PRIVATE)
+        sharedPreferences = context.getSharedPreferences("shared", Context.MODE_PRIVATE)
     }
-
-    var title: String?
-        get() = sharedPreferences.getString("title", "")
-        set(value) = sharedPreferences.edit().putString("title", value).apply()
-
     var isOnBoard: Boolean
-        get() {
-            return if (::sharedPreferences.isInitialized) {
-                sharedPreferences.getBoolean("board", false)
-            } else {
-                false
-            }
-        }
-        set(value) {
-            sharedPreferences.edit().putBoolean("board", value).apply()
-        }
+        get() = sharedPreferences.getBoolean("board", false)
+        set(value) = sharedPreferences.edit().putBoolean("board", value).apply()
+
+    var isSignUp: Boolean
+        get() = sharedPreferences.getBoolean("key", false)
+        set(value) = sharedPreferences.edit().putBoolean("key", value).apply()
 }

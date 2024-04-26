@@ -10,4 +10,6 @@
     <string name="add">Добавить</string>
     <string name="ready">Готово</string>
     <string name="title">title</string>
+    <string name="google">Google</string>
+    <string name="client_id">834917043151-fmvppqadoh0aphbiavnkctitjgv5kn88.apps.googleusercontent.com</string>
 </resources>

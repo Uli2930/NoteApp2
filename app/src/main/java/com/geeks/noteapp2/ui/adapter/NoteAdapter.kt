@@ -16,7 +16,6 @@ class NoteAdapter (private val onLongClick: OnClickItem, private val onClick: On
             binding.itemDescription.text = item?.description
             binding.itemDate.text = item?.date
             binding.itemTime.text = item?.time
-
         }
 
     }
@@ -36,6 +35,7 @@ class NoteAdapter (private val onLongClick: OnClickItem, private val onClick: On
         holder.itemView.setOnClickListener{
             onClick.onClick(getItem(position))
         }
+
     }
 
     class DiffCallback : DiffUtil.ItemCallback<NoteModel>() {
